@@ -164,7 +164,7 @@ class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
 		$display.= '<' . $this->_tag . ' ' . $this->_getAttr() . $close . '>';
 		$display.= $this->_content;
 		if($this->_close) {
-		$display.= '</' . $this->_tag . '>';
+			$display.= '</' . $this->_tag . '>';
 		}
 		$display.= $this->_append;
 		return $display;
