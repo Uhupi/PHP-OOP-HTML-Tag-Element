@@ -1,5 +1,5 @@
 #PHP OOP ELEMENT
-This a test version, not realeased jet.
+This a test version, not realeased yet.
 Simple class to create Html Tags/Elements without breaking the php.
 ## Requirements
 PHP 5.2
