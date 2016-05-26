@@ -1,5 +1,7 @@
 <?php
 
+// TEST
+
 class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
 
 	public $attr = array();
