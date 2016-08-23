@@ -178,6 +178,7 @@ class Layout_Element {
 	}
         
         public function __toString() {
+                $var = 'aaa';
 		return $this->render();
 	}
 
