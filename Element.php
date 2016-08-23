@@ -2,14 +2,14 @@
 
 class Layout_Element {
 
-	public $attr = array();
-	private $_tag;
-	protected $_content;
-	private $_class = array();
-	private $_close = TRUE;
-	private $_append = NULL;
-	private $_preppend = NULL;
-	private $_css = array();
+	public      $attr       = array();
+	private     $_tag;
+	protected   $_content;
+	private     $_class     = array();
+	private     $_close     = TRUE;
+	private     $_append    = NULL;
+	private     $_preppend  = NULL;
+	private     $_css       = array();
 
 	public function __construct($tag = 'div', $content = FALSE) {
 
