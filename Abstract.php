@@ -14,4 +14,6 @@ class Uhupi_Layout_Abstract {
 	}
 }
 
+$new = new Layout_Element();
+
 ?>

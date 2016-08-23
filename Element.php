@@ -1,185 +1,228 @@
 <?php
 
+/**
+ * Main Class for Layout to include on Framework (Uhupi)
+ *
+ * This is the main Frontend Tool from Uhupis Framework (www.uhupi.com).
+ * It allowes 
+ *
+ * PHP version 5
+ *
+ * LICENSE: NOT RELEASED JET
+ *
+ * @category   Frontend
+ * @package    PHP-OOP-HTML-Tag-Element
+ * @author     Santino Lange <santino@uhupi.com>
+ * @copyright  2015-2016 Uhupi Framework
+ * @license    NOT RELEASED JET
+ */
+
 class Layout_Element {
 
-	public      $attr       = array();
-	private     $_tag;
-	protected   $_content;
-	private     $_class     = array();
-	private     $_close     = TRUE;
-	private     $_append    = NULL;
-	private     $_preppend  = NULL;
-	private     $_css       = array();
+    /**
+     * Html Element attributes.
+     * @var array
+     */
+    public      $attr       = array();
 
-	public function __construct($tag = 'div', $content = FALSE) {
+    /**
+     * Content for Element.
+     * @var string
+     */
+    protected   $_content   = NULL;
 
-		$this->_tag = $tag;
-                
-                if ($content) {
-                    $this->setContent($content);
-                }
+    /**
+     * Html Element Type.
+     * @var string
+     */
+    private     $_tag       = NULL;
 
-	}
+    /**
+     * Html CSS Class.
+     * @var array
+     */
+    private     $_class     = array();
 
-	public function setTag($tag) {
+    /**
+     * Defines if Element is an Html Tag or not.
+     * @var boolean
+     */
+    private     $_noTag     = TRUE;
 
-		$this->_tag = $tag;
+    /**
+     * Set Content before Element
+     * @var string
+     */
+    private     $_append    = NULL;
 
-		return $this;
+    /**
+     * Set Content after Element
+     * @var string
+     */
+    private     $_preppend  = NULL;
 
-	}
+    /**
+     * Set Style CSS properties for Element
+     * @var string
+     */
+    private     $_css       = array();
 
-	public function append($content) {
+    public function __construct($tag = 'div', $content = FALSE) {
+            $this->_tag = $tag;
+            if ($content) {
+                $this->setContent($content);
+            }
+    }
 
-		$this->_append = $content;
+    public function setTag($tag) {
+            $this->_tag = $tag;
+            return $this;
+    }
 
-	}
+    public function append($content) {
+            $this->_append = $content;
+    }
 
-	public function preppend($content) {
+    public function preppend($content) {
+            $this->_preppend = $content;
+    }
 
-		$this->_preppend = $content;
+    public function setAttr($name, $value) {
+            $this->attr[$name] = $value;
+            return $this;
+    }
 
-	}
+    public function setContent($content, $reset = FALSE) {
 
-	public function setAttr($name, $value) {
+            if(is_object($content) && method_exists($content, 'render')) {
+                    $content = $content->render();
+            }
 
-		$this->attr[$name] = $value;
+            if($reset) {
 
-		return $this;
+                    $this->_content = $content;
 
-	}
+            } else {
 
-	public function setContent($content, $reset = FALSE) {
+                    $this->_content.= $content;
 
-		if(is_object($content) && method_exists($content, 'render')) {
-			$content = $content->render();
-		}
+            }
 
-		if($reset) {
+            return $this;
 
-			$this->_content = $content;
+    }
 
-		} else {
+    public function setInclude($path, $dir = ROOT) {
+            ob_start();
+            include $dir . '/' . $path;
+            $content = ob_get_clean();
+            $this->setContent($content);
 
-			$this->_content.= $content;
+            return $this;
 
-		}
+    }
 
-		return $this;
+    public function setClass($class) {
 
-	}
+            $this->_class[$class] = $class;
 
-	public function setInclude($path, $dir = ROOT) {
-		ob_start();
-		include $dir . '/' . $path;
-		$content = ob_get_clean();
-		$this->setContent($content);
+            return $this;
 
-		return $this;
+    }
 
-	}
+    public function setData($data, $value) {
 
-	public function setClass($class) {
+            $this->attr['data-' . $data] = $value;
 
-		$this->_class[$class] = $class;
+            return $this;
 
-		return $this;
+    }
 
-	}
+    public function setCss($property, $value) {
 
-	public function setData($data, $value) {
+            $this->_css[$property] = $value;
 
-		$this->attr['data-' . $data] = $value;
+            return $this;
 
-		return $this;
+    }
 
-	}
+    public function setTitle($title) {
 
-	public function setCss($property, $value) {
+            $this->setAttr('title', $title);
 
-		$this->_css[$property] = $value;
+            return $this;
 
-		return $this;
+    }
 
-	}
+    public function getContent() {
+        return $this->_content;
+    }
 
-	public function setTitle($title) {
+    private function _getAttr() {
 
-		$this->setAttr('title', $title);
+            $display = NULL;
 
-		return $this;
+            if (count($this->_class)) {
+                    $this->setAttr('class', implode(' ', $this->_class));
+            }
 
-	}
-        
-        public function getContent() {
-            return $this->_content;
-        }
+            $css = NULL;
+            if (count($this->_css)) {
+                    foreach($this->_css as $key => $value) {
+                            $css.= $key . ': ' . $value . '; ';
+                    }
+                    $this->setAttr('style', $css);
+            }
 
-	private function _getAttr() {
+            foreach($this->attr as $key => $value) {
 
-		$display = NULL;
+                    if(!$value) {
+                            $display.= $key . ' ';
+                    } else {
+                            $display.= $key . '="' . $value . '" ';
+                    }
+            }
 
-		if (count($this->_class)) {
-			$this->setAttr('class', implode(' ', $this->_class));
-		}
+            return $display;
 
-		$css = NULL;
-		if (count($this->_css)) {
-			foreach($this->_css as $key => $value) {
-				$css.= $key . ': ' . $value . '; ';
-			}
-			$this->setAttr('style', $css);
-		}
+    }
 
-		foreach($this->attr as $key => $value) {
+    public function notClosing() {
 
-			if(!$value) {
-				$display.= $key . ' ';
-			} else {
-				$display.= $key . '="' . $value . '" ';
-			}
-		}
+            $this->isTag();
+            return $this;
 
-		return $display;
+    }
 
-	}
+    public function isTag() {
 
-	public function notClosing() {
+            $this->_noTag = FALSE;
+            return $this;
 
-		$this->isTag();
-		return $this;
+    }
 
-	}
+    public function render() {
 
-	public function isTag() {
+            $display = NULL;
 
-		$this->_close = FALSE;
-		return $this;
+            $close = NULL;
+            if(!$this->_noTag) {
+                    $close = '/';
+            }
+            $display.= $this->_preppend;
+            $display.= '<' . $this->_tag . ' ' . $this->_getAttr() . $close . '>';
+            $display.= $this->_content;
+            if($this->_noTag) {
+                    $display.= '</' . $this->_tag . '>';
+            }
+            $display.= $this->_append;
+            return $display;
 
-	}
+    }
 
-	public function render() {
-
-		$display = NULL;
-
-		$close = NULL;
-		if(!$this->_close) {
-			$close = '/';
-		}
-		$display.= $this->_preppend;
-		$display.= '<' . $this->_tag . ' ' . $this->_getAttr() . $close . '>';
-		$display.= $this->_content;
-		if($this->_close) {
-			$display.= '</' . $this->_tag . '>';
-		}
-		$display.= $this->_append;
-		return $display;
-
-	}
-        
-        public function __toString() {
-		return $this->render();
-	}
+    public function __toString() {
+            return $this->render();
+    }
 
 }
 
