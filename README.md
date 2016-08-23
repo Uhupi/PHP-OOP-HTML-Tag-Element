@@ -3,5 +3,11 @@ This a test version, not realeased yet.
 Simple class to create Html Tags/Elements without breaking the php.
 ## Requirements
 PHP 5.2
+## Installation
+* General: Copy Element.php to your include folder and call the "Layout_Element" class.
+* Uhupi Framework: Call Layout_Element from everywhere in your Project.
+* WordPress: Include file to your Theme or any Plugin (Plugin and Explanation coming soon)
+* ZEND Framework: Create folder "Layout" in the Autoload Folder for your Project and copy the Element.php file in it. You should be able to call it from everywhere in yout project with "Layout_Element".
+
 ## License
 PHP-OOP-HTML-Tag-Element is licensed under the [MIT License](http://opensource.org/licenses/MIT).
