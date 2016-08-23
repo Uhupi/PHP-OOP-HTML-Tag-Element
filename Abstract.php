@@ -12,10 +12,6 @@ class Uhupi_Layout_Abstract {
 //		$this->view = new view($request);
 		
 	}
-	
-	public function __toString() {
-		return $this->render();
-	}
 }
 
 ?>

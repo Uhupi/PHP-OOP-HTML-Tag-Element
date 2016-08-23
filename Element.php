@@ -1,6 +1,6 @@
 <?php
 
-class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
+class Layout_Element {
 
 	public $attr = array();
 	private $_tag;
@@ -11,11 +11,13 @@ class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
 	private $_preppend = NULL;
 	private $_css = array();
 
-	public function __construct($tag = 'div') {
-
-		parent::__construct();
+	public function __construct($tag = 'div', $content = FALSE) {
 
 		$this->_tag = $tag;
+                
+                if ($content) {
+                    $this->setContent($content);
+                }
 
 	}
 
@@ -108,6 +110,10 @@ class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
 		return $this;
 
 	}
+        
+        public function getContent() {
+            return $this->_content;
+        }
 
 	private function _getAttr() {
 
@@ -169,6 +175,10 @@ class Uhupi_Layout_Element extends Uhupi_Layout_Abstract {
 		$display.= $this->_append;
 		return $display;
 
+	}
+        
+        public function __toString() {
+		return $this->render();
 	}
 
 }
