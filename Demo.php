@@ -3,7 +3,6 @@
 // Print a simple Link
 $link = new Layout_Element('a', 'Click here');
 $link->setAttr('href', '/');
-$link->setClass('button');
 
 echo $link;
 
