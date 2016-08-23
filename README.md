@@ -1,6 +1,10 @@
 #PHP OOP ELEMENT
-This a test version, not realeased yet.
+###This a test version, not realeased yet.
+
+This is a usefull helpers for all PHP Forntent developers and the main code template engine from the Uhupi Framework.
+
 Simple class to create Html Tags/Elements without breaking the php.
+
 ## Requirements
 PHP 5.2
 ## Installation
