@@ -10,7 +10,7 @@
  *
  * LICENSE: NOT RELEASED JET
  *
- * @category   Frontend
+ * @category   Frontend & Backend
  * @package    PHP-OOP-HTML-Tag-Element
  * @author     Santino Lange <santino@uhupi.com>
  * @copyright  2015-2016 Uhupi Framework
