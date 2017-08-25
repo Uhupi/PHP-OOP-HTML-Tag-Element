@@ -9,7 +9,7 @@ echo $link;
 // Or create your Link template
 class Layout_Button extends Layout_Element {
     public function __construct($content = FALSE, $url = FALSE) {
-        parent::__construct('a', $content);
+        parent::__construct('a', $content, 'button');
         if ($url) {
             $this->setAttr('href', $url);
         }
@@ -19,6 +19,7 @@ class Layout_Button extends Layout_Element {
 
 // Print it and maybe you need to add something else
 $button = new Layout_Button('Click here', '/');
+// or maybe you decide in the view to add come content
 if (TRUE) {
     $button->setContent(' NOW!');
 }
