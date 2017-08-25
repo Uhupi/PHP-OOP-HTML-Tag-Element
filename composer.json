@@ -1,5 +1,6 @@
 {
     "name": "uhupi/php-oop-html-tag-element",
+    "version": "1.0.0",
     "description": "This is a usefull helpers for all PHP Forntent developers and the main code template engine from the Uhupi Framework.",
     "keywords": ["uhupi", "html", "oop", "php", "element"],
     "homepage": "https://github.com/Uhupi/PHP-OOP-HTML-Tag-Element",
