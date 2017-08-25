@@ -6,15 +6,15 @@
  * This is the main Frontend Tool from Uhupis Framework (www.uhupi.com).
  * It allowes 
  *
- * PHP version 5
+ * PHP version 5+
  *
- * LICENSE: NOT RELEASED JET
+ * LICENSE: NOT RELEASED YET
  *
  * @category   Frontend & Backend
  * @package    PHP-OOP-HTML-Tag-Element
  * @author     Santino Lange <santino@uhupi.com>
- * @copyright  2015-2016 Uhupi Framework
- * @license    NOT RELEASED JET
+ * @copyright  2015-2016 Uhupi Framework (Not-released yet)
+ * @license    MIT
  */
 
 class Layout_Element {
@@ -23,7 +23,7 @@ class Layout_Element {
      * Html Element attributes.
      * @var array
      */
-    public      $attr       = array();
+    public      $attr       = [];
 
     /**
      * Content for Element.
@@ -65,9 +65,19 @@ class Layout_Element {
      * Set Style CSS properties for Element
      * @var string
      */
-    private     $_css       = array();
-
-    public function __construct($tag = 'div', $content = FALSE, $class = null) {
+    private     $_css       = [];
+    
+    /**
+    * __construct
+     *
+     * MAGIC FUNCTION
+     * Collects or sets basic information about the Element
+     *
+     * @param string $tag       The html element you want to use
+     * @param mixed  $content   Preset or previous content in your element
+     * @param string $class     Class or classes you want to preset in your element
+     */
+    public function __construct($tag = 'div', $content = false, $class = null) {
         $this->_tag = $tag;
         if ($content) {
             $this->setContent($content);
@@ -76,77 +86,212 @@ class Layout_Element {
             $this->setClass($class);
         }
     }
-
+    
+    /**
+    * setTag
+     *
+     * Set the html element you want to use
+     *
+     * @param string $tag    The html element you want to use
+     */
     public function setTag($tag) {
         $this->_tag = $tag;
         return $this;
     }
-
+    
+    /**
+     * append
+     *
+     * Glue another Element or content after this Element
+     *
+     * @param mixed $content Element or String you want to append
+     */
     public function append($content) {
         $this->_append = $content;
+        return $this;
     }
-
+    
+    /**
+     * preppend
+     *
+     * Glue another Element or content before this Element
+     *
+     * @param mixed $content Element or String you want to preppend
+     */
     public function preppend($content) {
         $this->_preppend = $content;
+        return $this;
     }
-
+    
+    /**
+     * setAttr
+     *
+     * ATTRIBUTE MANAGMENT
+     * Set a new atributte fot this Element
+     *
+     * @param string $name   Name of attributte
+     * @param string $value  Value of attributte
+     */
     public function setAttr($name, $value) {
         $this->attr[$name] = $value;
         return $this;
     }
 
-    public function setContent($content, $reset = FALSE) {
+    /**
+     * setTitle
+     *
+     * ATTRIBUTE MANAGMENT
+     * Fill the attributte "title"
+     *
+     * @param string    $title   The title for Element
+     */
+    public function setTitle($title) {
+        $this->setAttr('title', $title);
+        return $this;
+    }
+    
+    /**
+     * setContent
+     * 
+     * CONTENT MANAGMENT
+     * Set or appennds more content into the Element
+     *
+     * @param mixed  $content    Element object or String to render in Element
+     * @param string $reset      Dismiss all appended content so far
+     */
+    public function setContent($content, $reset = false) {
         if(is_object($content) && method_exists($content, 'render')) {
             $content = $content->render();
         }
         if($reset) {
             $this->_content = $content;
-
         } else {
             $this->_content.= $content;
         }
         return $this;
     }
-
-    public function setInclude($path, $dir = ROOT) {
+    
+    /**
+     * setInclude
+     *
+     * CONTENT MANAGMENT
+     * Allowes the possibility of runing a php include and append it as content
+     *
+     * @param string    $file   File to be include
+     * @param string    $path   Path where the file is to be found
+     */
+    public function setInclude($file, $path = __DIR__) {
         ob_start();
-        include $dir . '/' . $path;
-        $content = ob_get_clean();
-        $this->setContent($content);
+        include $path . '/' . $file;
+        $this->setContent(ob_get_clean());
         return $this;
     }
 
+    /**
+     * getContent
+     *
+     * CONTENT MANAGMENT
+     * Get the collected content so far
+     *
+     * @return string   $this->_content return the content
+     */
+    public function getContent() {
+        return $this->_content;
+    }
+
+    /**
+     * addClass
+     *
+     * CLASS MANAGMENT
+     * Add one or more classes to the Element
+     *
+     * @param string    $classes    Class name or different classes separate by spaces
+     */
+    public function addClass($classes) {
+        foreach (explode(' ', $classes) as $class) {
+            $this->setClass($class);
+        }
+        return $this;
+    }
+
+    /**
+     * setClass
+     *
+     * CLASS MANAGMENT
+     * Set one class to the Element
+     *
+     * @param string    $classes    Class name
+     */
     public function setClass($class) {
         $this->_class[$class] = $class;
         return $this;
     }
 
-    public function setData($data, $value) {
-        $this->attr['data-' . $data] = $value;
+    /**
+     * hasClass
+     *
+     * CLASS MANAGMENT
+     * Check if the Element has a class
+     *
+     * @param string    $class  Class name
+     */
+    public function hasClass($class) {
+        if ($this->_class[$class]) {
+            return true;
+        }
+    }
+
+    /**
+     * setData
+     *
+     * DATA ATTRIBUTE MANAGMENT
+     * Check if the Element has a class
+     *
+     * @param string    $name   The data name will be complile with "data-"
+     * @param string    $value  The data value
+     */
+    public function setData($name, $value) {
+        $this->attr['data-' . $name] = $value;
         return $this;
     }
 
+    /**
+     * setData
+     *
+     * CSS ATTRIBUTE MANAGMENT
+     * This allowes to use inline CSS styling on your element
+     * 
+     * NOTE:
+     * Inlining CSS attributes on HTML elements (e.g., <p style=...>)
+     * should be avoided where possible, as this often leads to unnecessary
+     * code duplication. Further, inline CSS on HTML elements is blocked by
+     * default with Content Security Policy (CSP). 
+     *
+     * @param string    $property   Standard CSS Property
+     * @param string    $value      CSS value
+     */
     public function setCss($property, $value) {
         $this->_css[$property] = $value;
         return $this;
     }
 
-    public function setTitle($title) {
-        $this->setAttr('title', $title);
-        return $this;
-    }
-
-    public function getContent() {
-        return $this->_content;
-    }
-
-    private function _getAttr() {
+    /**
+     * _renderAttr
+     *
+     * DATA ATTRIBUTE MANAGMENT
+     * Render all attibutes in this Element
+     *
+     * @return string    Al the attributes glue toguether in a string
+     */
+    private function _renderAttr() {
         $display = null;
 
+        /* Lets set classes to the attributes */
         if (count($this->_class)) {
             $this->setAttr('class', implode(' ', $this->_class));
         }
 
+        /* Lets set styling to the attributes */
         $css = null;
         if (count($this->_css)) {
             foreach($this->_css as $key => $value) {
@@ -165,16 +310,23 @@ class Layout_Element {
         return $display;
     }
 
-    public function notClosing() {
-        $this->isTag();
-        return $this;
-    }
-
+    /**
+     * isTag
+     *
+     * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
+     */
     public function isTag() {
-        $this->_noTag = FALSE;
+        $this->_noTag = false;
         return $this;
     }
 
+    /**
+     * render
+     *
+     * Render object into an string
+     *
+     * @return string   $display    All the attributes glue toguether in a string
+     */
     public function render() {
         $display = null;
 
@@ -183,16 +335,23 @@ class Layout_Element {
             $close = '/';
         }
         $display.= $this->_preppend;
-        $display.= '<' . $this->_tag . ' ' . $this->_getAttr() . $close . '>';
+        $display.= '<' . $this->_tag . ' ' . $this->_renderAttr() . $close . '>';
         $display.= $this->_content;
         if($this->_noTag) {
             $display.= '</' . $this->_tag . '>';
         }
         $display.= $this->_append;
         return $display;
-
     }
 
+    /**
+     * __toString
+     *
+     * MAGIC FUNCTION
+     * Render object when it is treated like a string
+     *
+     * @return string   $this->render() All the attributes glue toguether in a string
+     */
     public function __toString() {
         return $this->render();
     }
