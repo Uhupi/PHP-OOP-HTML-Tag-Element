@@ -8,8 +8,6 @@
  *
  * PHP version 5+
  *
- * LICENSE: NOT RELEASED YET
- *
  * @category   Frontend & Backend
  * @package    PHP-OOP-HTML-Tag-Element
  * @author     Santino Lange <santino@uhupi.com>
