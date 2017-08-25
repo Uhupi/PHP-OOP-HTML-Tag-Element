@@ -5,6 +5,8 @@ This is a usefull helpers for all PHP Forntent developers and the main code temp
 
 Simple class to create Html Tags/Elements without breaking the php.
 
+Let you colleges understand what you intented with your CSS code and don't leave any unresolve option open.
+
 ## Requirements
 PHP 5.2
 ## Installation
