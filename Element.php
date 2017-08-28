@@ -39,7 +39,7 @@ class Layout_Element {
      * Html CSS Class.
      * @var array
      */
-    private     $_class     = array();
+    private     $_class     = [];
 
     /**
      * Defines if Element is an Html Tag or not.
