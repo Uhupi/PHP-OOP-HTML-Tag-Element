@@ -354,5 +354,3 @@ class Layout_Element {
         return $this->render();
     }
 }
-
-?>
