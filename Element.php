@@ -305,7 +305,7 @@ class Layout_Element {
                 $display.= $key . '="' . $value . '" ';
             }
         }
-        return $display;
+        return ($display) ? ' ' . $display : null ;
     }
 
     /**
@@ -333,7 +333,7 @@ class Layout_Element {
             $close = '/';
         }
         $display.= $this->_preppend;
-        $display.= '<' . $this->_tag . ' ' . $this->_renderAttr() . $close . '>';
+        $display.= '<' . $this->_tag . $this->_renderAttr() . $close . '>';
         $display.= $this->_content;
         if($this->_noTag) {
             $display.= '</' . $this->_tag . '>';
