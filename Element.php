@@ -45,19 +45,19 @@ class Layout_Element {
      * Defines if Element is an Html Tag or not.
      * @var boolean
      */
-    private     $_noTag     = true;
+    private     $isSingleton= false;
 
     /**
      * Set Content before Element
      * @var string
      */
-    private     $_append    = null;
+    private     $append    = null;
 
     /**
      * Set Content after Element
      * @var string
      */
-    private     $_preppend  = null;
+    private     $preppend  = null;
 
     /**
      * Set Style CSS properties for Element
@@ -105,7 +105,7 @@ class Layout_Element {
      * @param mixed $content Element or String you want to append
      */
     public function append($content) {
-        $this->_append = $content;
+        $this->append = $content;
         return $this;
     }
     
@@ -117,7 +117,7 @@ class Layout_Element {
      * @param mixed $content Element or String you want to preppend
      */
     public function preppend($content) {
-        $this->_preppend = $content;
+        $this->preppend = $content;
         return $this;
     }
     
@@ -310,11 +310,21 @@ class Layout_Element {
 
     /**
      * isTag
-     *
+     * @deprecated since version 1.0.4
      * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
      */
     public function isTag() {
-        $this->_noTag = false;
+        $this->isSingleton();
+        return $this;
+    }
+
+    /**
+     * isTag
+     * @deprecated since version 1.0.4
+     * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
+     */
+    public function isSingleton() {
+        $this->isSingleton = true;
         return $this;
     }
 
@@ -326,20 +336,22 @@ class Layout_Element {
      * @return string   $display    All the attributes glue toguether in a string
      */
     public function render() {
-        $display = null;
+        
+        $tag    = $this->_tag;
+        $opener = '<';
+        $closer = '>';
+        $end    = '/';
+        
+        $attrs = $this->_renderAttr();
 
-        $close = null;
-        if(!$this->_noTag) {
-            $close = '/';
-        }
-        $display.= $this->_preppend;
-        $display.= '<' . $this->_tag . $this->_renderAttr() . $close . '>';
+        $display = null;
+        $display.= $this->preppend;
+        $display.= $opener . $tag . $attrs . (($this->isSingleton) ? $end : null) . $closer;
         $display.= $this->_content;
-        if($this->_noTag) {
-            $display.= '</' . $this->_tag . '>';
-        }
-        $display.= $this->_append;
-        return $display;
+        $display.= ($this->isSingleton) ? null : $opener . $end . $tag . $closer ;
+        $display.= $this->append;
+        
+        return ($this->_content || $attrs || $this->isSingleton) ? $display : null;
     }
 
     /**
