@@ -4,7 +4,6 @@
  * Main Class for Layout to include on Framework (Uhupi)
  *
  * This is the main Frontend Tool from Uhupis Framework (www.uhupi.com).
- * It allowes 
  *
  * PHP version 5+
  *
@@ -33,40 +32,40 @@ class Layout_Element {
      * Html Element Type.
      * @var string
      */
-    private     $_tag       = null;
+    protected   $_tag       = null;
 
     /**
      * Html CSS Class.
      * @var array
      */
-    private     $_class     = [];
+    protected   $_class   = [];
 
     /**
      * Defines if Element is an Html Tag or not.
      * @var boolean
      */
-    private     $isSingleton= false;
+    protected   $isSingleton= false;
 
     /**
      * Set Content before Element
      * @var string
      */
-    private     $append    = null;
+    protected   $append    = null;
 
     /**
      * Set Content after Element
      * @var string
      */
-    private     $preppend  = null;
+    protected   $preppend  = null;
 
     /**
      * Set Style CSS properties for Element
      * @var string
      */
     private     $_css       = [];
-    
+
     /**
-    * __construct
+     * __construct
      *
      * MAGIC FUNCTION
      * Collects or sets basic information about the Element
@@ -84,51 +83,55 @@ class Layout_Element {
             $this->setClass($class);
         }
     }
-    
+
     /**
-    * setTag
+     * setTag
      *
      * Set the html element you want to use
      *
      * @param string $tag    The html element you want to use
+     * @return $this;
      */
     public function setTag($tag) {
         $this->_tag = $tag;
         return $this;
     }
-    
+
     /**
      * append
      *
      * Glue another Element or content after this Element
      *
      * @param mixed $content Element or String you want to append
+     * @return $this;
      */
     public function append($content) {
         $this->append = $content;
         return $this;
     }
-    
+
     /**
      * preppend
      *
      * Glue another Element or content before this Element
      *
      * @param mixed $content Element or String you want to preppend
+     * @return $this;
      */
     public function preppend($content) {
         $this->preppend = $content;
         return $this;
     }
-    
+
     /**
      * setAttr
      *
-     * ATTRIBUTE MANAGMENT
-     * Set a new atributte fot this Element
+     * ATTRIBUTE MANAGEMENT
+     * Set a new attribute fot this Element
      *
-     * @param string $name   Name of attributte
-     * @param string $value  Value of attributte
+     * @param string $name   Name of attribute
+     * @param string $value  Value of attribute
+     * @return $this;
      */
     public function setAttr($name, $value) {
         $this->attr[$name] = $value;
@@ -138,45 +141,48 @@ class Layout_Element {
     /**
      * setTitle
      *
-     * ATTRIBUTE MANAGMENT
-     * Fill the attributte "title"
+     * ATTRIBUTE MANAGEMENT
+     * Fill the attribute "title"
      *
      * @param string    $title   The title for Element
+     * @return $this;
      */
     public function setTitle($title) {
         $this->setAttr('title', $title);
         return $this;
     }
-    
+
     /**
      * setContent
-     * 
-     * CONTENT MANAGMENT
-     * Set or appennds more content into the Element
+     *
+     * CONTENT MANAGEMENT
+     * Set or appends more content into the Element
      *
      * @param mixed  $content    Element object or String to render in Element
-     * @param string $reset      Dismiss all appended content so far
+     * @param boolean $reset      Dismiss all appended content so far
+     * @return $this;
      */
     public function setContent($content, $reset = false) {
-        if(is_object($content) && method_exists($content, 'render')) {
+        if (is_object($content) && method_exists($content, 'render')) {
             $content = $content->render();
         }
-        if($reset) {
+        if ($reset) {
             $this->_content = $content;
         } else {
             $this->_content.= $content;
         }
         return $this;
     }
-    
+
     /**
      * setInclude
      *
-     * CONTENT MANAGMENT
-     * Allowes the possibility of runing a php include and append it as content
+     * CONTENT MANAGEMENT
+     * Allowes the possibility of running a php include and append it as content
      *
      * @param string    $file   File to be include
      * @param string    $path   Path where the file is to be found
+     * @return $this;
      */
     public function setInclude($file, $path = __DIR__) {
         ob_start();
@@ -188,7 +194,7 @@ class Layout_Element {
     /**
      * getContent
      *
-     * CONTENT MANAGMENT
+     * CONTENT MANAGEMENT
      * Get the collected content so far
      *
      * @return string   $this->_content return the content
@@ -200,10 +206,11 @@ class Layout_Element {
     /**
      * addClass
      *
-     * CLASS MANAGMENT
+     * CLASS MANAGEMENT
      * Add one or more classes to the Element
      *
      * @param string    $classes    Class name or different classes separate by spaces
+     * @return $this;
      */
     public function addClass($classes) {
         foreach (explode(' ', $classes) as $class) {
@@ -215,10 +222,11 @@ class Layout_Element {
     /**
      * setClass
      *
-     * CLASS MANAGMENT
+     * CLASS MANAGEMENT
      * Set one class to the Element
      *
-     * @param string    $classes    Class name
+     * @param string $class Class name
+     * @return $this;
      */
     public function setClass($class) {
         $this->_class[$class] = $class;
@@ -226,15 +234,30 @@ class Layout_Element {
     }
 
     /**
+     * removeClass
+     *
+     * CLASS MANAGEMENT
+     * Remove one class from the Element
+     *
+     * @param string $class Class name
+     * @return $this;
+     */
+    public function removeClass($class) {
+        unset($this->_class[$class]);
+        return $this;
+    }
+
+    /**
      * hasClass
      *
-     * CLASS MANAGMENT
+     * CLASS MANAGEMENT
      * Check if the Element has a class
      *
      * @param string    $class  Class name
+     * @return boolean;
      */
     public function hasClass($class) {
-        if ($this->_class[$class]) {
+        if (isset($this->_class[$class]) && $this->_class[$class]) {
             return true;
         }
     }
@@ -242,11 +265,12 @@ class Layout_Element {
     /**
      * setData
      *
-     * DATA ATTRIBUTE MANAGMENT
+     * DATA ATTRIBUTE MANAGEMENT
      * Check if the Element has a class
      *
      * @param string    $name   The data name will be complile with "data-"
      * @param string    $value  The data value
+     * @return $this;
      */
     public function setData($name, $value) {
         $this->attr['data-' . $name] = $value;
@@ -256,17 +280,18 @@ class Layout_Element {
     /**
      * setData
      *
-     * CSS ATTRIBUTE MANAGMENT
+     * CSS ATTRIBUTE MANAGEMENT
      * This allowes to use inline CSS styling on your element
-     * 
+     *
      * NOTE:
      * Inlining CSS attributes on HTML elements (e.g., <p style=...>)
      * should be avoided where possible, as this often leads to unnecessary
      * code duplication. Further, inline CSS on HTML elements is blocked by
-     * default with Content Security Policy (CSP). 
+     * default with Content Security Policy (CSP).
      *
      * @param string    $property   Standard CSS Property
      * @param string    $value      CSS value
+     * @return $this;
      */
     public function setCss($property, $value) {
         $this->_css[$property] = $value;
@@ -276,7 +301,7 @@ class Layout_Element {
     /**
      * _renderAttr
      *
-     * DATA ATTRIBUTE MANAGMENT
+     * DATA ATTRIBUTE MANAGEMENT
      * Render all attibutes in this Element
      *
      * @return string    Al the attributes glue toguether in a string
@@ -292,20 +317,20 @@ class Layout_Element {
         /* Lets set styling to the attributes */
         $css = null;
         if (count($this->_css)) {
-            foreach($this->_css as $key => $value) {
+            foreach ($this->_css as $key => $value) {
                 $css.= $key . ': ' . $value . '; ';
             }
             $this->setAttr('style', $css);
         }
 
-        foreach($this->attr as $key => $value) {
-            if(!$value) {
+        foreach ($this->attr as $key => $value) {
+            if ($value === false) {
                 $display.= $key . ' ';
             } else {
                 $display.= $key . '="' . $value . '" ';
             }
         }
-        return ($display) ? ' ' . $display : null ;
+        return " $display ";
     }
 
     /**
@@ -333,15 +358,15 @@ class Layout_Element {
      *
      * Render object into an string
      *
-     * @return string   $display    All the attributes glue toguether in a string
+     * @return string   $display    All the attributes glue together in a string
      */
     public function render() {
-        
+
         $tag    = $this->_tag;
         $opener = '<';
         $closer = '>';
         $end    = '/';
-        
+
         $attrs = $this->_renderAttr();
 
         $display = null;
@@ -350,8 +375,8 @@ class Layout_Element {
         $display.= $this->_content;
         $display.= ($this->isSingleton) ? null : $opener . $end . $tag . $closer ;
         $display.= $this->append;
-        
-        return ($this->_content || $attrs || $this->isSingleton) ? $display : null;
+
+        return ($this->_content || $attrs || $this->isSingleton) ? $display : '';
     }
 
     /**
@@ -360,7 +385,7 @@ class Layout_Element {
      * MAGIC FUNCTION
      * Render object when it is treated like a string
      *
-     * @return string   $this->render() All the attributes glue toguether in a string
+     * @return string   $this->render() All the attributes glue together into a string
      */
     public function __toString() {
         return $this->render();
