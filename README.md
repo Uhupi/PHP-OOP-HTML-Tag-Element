@@ -1,20 +1,22 @@
 # PHP OOP ELEMENT
 
-### This a test version, not realeased yet.
+### Is PHP really only Back-End now?
 
-This is a usefull helpers for all PHP Forntent developers and the main code template engine from the Uhupi Framework.
+Simple class to create Html Tags/Elements.
+This is a usefull helper for all PHP Front-End developers out there trying to bring their PHP code to the Front again. It uses the basics of an OOP Programming in PHP to make your HTML layout managable, heritable and independent. (Componentwise or Snippet if you may)
 
-Simple class to create Html Tags/Elements without breaking the php.
-
-Let you colleges understand what you intented with your CSS code and don't leave any unresolve option open.
+### Features
+* Do not break your PHP code and to embed inbeetween Html or JS. Crate small snippets and print from one variable. 
+* Manage globally you entire application using heritance, designing a layout that responses to any change. 
+* Also if your apllication already runs on PHP you may have lots of resources (like Routing, locale, Translations...) that will not be available in the front and it gets very complicated to get them into an Javascript or frameworks like React.js or Vue.js.
+* Creating small components in PHP to be parsed by Javascript or any JS Framework allows to use you full PHP Potencial it will possible to write frontend code in PHP and use it on the clientside. More to that cooming soon...
+* Gut clean possiblity for Meaningful-Names and file documentation the way we all know it in PHP. In Beetween Modeling and 
 
 ## Requirements
 PHP 5.2
 ## Installation
-* General: Copy Element.php to your include folder and call the "Layout_Element" class.
-* Uhupi Framework: Call Layout_Element from everywhere in your Project.
-* WordPress: Include file to your Theme or any Plugin (Plugin and Explanation coming soon)
-* ZEND Framework: Create folder "Layout" in the Autoload Folder for your Project and copy the Element.php file in it. You should be able to call it from everywhere in yout project with "new Layout_Element()".
+* PHP WebApp: Download and Copy Element.php to your project depending on your namespacing include the file into a namespaced file and create a class extending it.
+* WordPress: Include file to your Theme or any Plugin (Plugin and Explanation coming soon...)
 
 ## License
 PHP-OOP-HTML-Tag-Element is licensed under the [MIT License](http://opensource.org/licenses/MIT).
