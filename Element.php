@@ -345,7 +345,6 @@ class Layout_Element {
 
     /**
      * isTag
-     * @deprecated since version 1.0.4
      * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
      */
     public function isSingleton() {
