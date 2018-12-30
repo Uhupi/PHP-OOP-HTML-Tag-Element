@@ -1,6 +1,6 @@
 <?php
 
-// Print a simple Link
+// print a simple Link
 $link = new Layout_Element('a', 'Click here');
 $link->setAttr('href', '/');
 
@@ -8,7 +8,7 @@ echo $link;
 
 // Or create your Link template
 class Layout_Button extends Layout_Element {
-    public function __construct($content = FALSE, $url = FALSE) {
+    public function __construct($content = false, $url = false) {
         parent::__construct('a', $content, 'button');
         if ($url) {
             $this->setAttr('href', $url);
@@ -17,14 +17,13 @@ class Layout_Button extends Layout_Element {
     }
 }
 
-// Print it and maybe you need to add something else
+// print adding your defined values like content and the url
 $button = new Layout_Button('Click here', '/');
-// or maybe you decide in the view to add come content
+// or maybe you decide in the view or yout template to add come content
 if (TRUE) {
     $button->setContent(' NOW!');
 }
 echo $button;
 
-// Or maybe Print it in one line?
+// or Print it in one line if yout like
 echo new Layout_Button('Click here', '/');
-
