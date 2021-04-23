@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Main Class for Layout to include on Framework (Uhupi)
+ * Main Class for Layout to include on Framework
  *
- * This is the main Frontend Tool from Uhupis Framework (www.uhupi.com).
+ * This is a PHP Utility for Frontend Developers.
  *
- * PHP version 5+
+ * PHP version 7.4+
  *
  * @category   Frontend & Backend
  * @package    PHP-OOP-HTML-Tag-Element
  * @author     Santino Lange <santino@uhupi.com>
- * @copyright  2015-2016 Uhupi Framework (Not-released yet)
+ * @copyright  2015-2021 Uhupi Utilities
  * @license    MIT
  */
 
@@ -86,13 +86,10 @@ class Layout_Element {
 
     /**
      * setTag
-     *
      * Set the html element you want to use
-     *
-     * @param string $tag    The html element you want to use
-     * @return $this;
      */
-    public function setTag($tag) {
+    public function setTag(string $tag): self
+    {
         $this->_tag = $tag;
         return $this;
     }
@@ -105,7 +102,8 @@ class Layout_Element {
      * @param mixed $content Element or String you want to append
      * @return $this;
      */
-    public function append($content) {
+    public function append(?string $content): self
+    {
         $this->append = $content;
         return $this;
     }
@@ -118,51 +116,56 @@ class Layout_Element {
      * @param mixed $content Element or String you want to preppend
      * @return $this;
      */
-    public function preppend($content) {
+    public function preppend(?string $content): self
+    {
         $this->preppend = $content;
         return $this;
     }
 
     /**
      * setAttr
-     *
      * ATTRIBUTE MANAGEMENT
-     * Set a new attribute fot this Element
-     *
-     * @param string $name   Name of attribute
-     * @param string $value  Value of attribute
-     * @return $this;
+     * Set a new attribute for this Element
      */
-    public function setAttr($name, $value) {
+    public function setAttr(string $name, string $value): self
+    {
         $this->attr[$name] = $value;
         return $this;
     }
 
     /**
+     * getAttr
+     * ATTRIBUTE MANAGEMENT
+     * Get a new attribute from this Element
+     */
+    public function getAttr(string $name) : ?string
+    {
+        if (isset($this->attr[$name])) {
+            return $this->attr[$name];
+        }
+        return null;
+    }
+
+    /**
      * setTitle
-     *
      * ATTRIBUTE MANAGEMENT
      * Fill the attribute "title"
-     *
-     * @param string    $title   The title for Element
-     * @return $this;
      */
-    public function setTitle($title) {
+    public function setTitle(string $title): self
+    {
         $this->setAttr('title', $title);
         return $this;
     }
 
     /**
      * setContent
-     *
      * CONTENT MANAGEMENT
      * Set or appends more content into the Element
      *
-     * @param mixed  $content    Element object or String to render in Element
-     * @param boolean $reset      Dismiss all appended content so far
-     * @return $this;
+     * @param mixed  $content Element object or String to render in Element
      */
-    public function setContent($content, $reset = false) {
+    public function setContent(?string $content, bool $reset = false): self
+    {
         if (is_object($content) && method_exists($content, 'render')) {
             $content = $content->render();
         }
@@ -176,15 +179,14 @@ class Layout_Element {
 
     /**
      * setInclude
-     *
      * CONTENT MANAGEMENT
      * Allowes the possibility of running a php include and append it as content
      *
      * @param string    $file   File to be include
      * @param string    $path   Path where the file is to be found
-     * @return $this;
      */
-    public function setInclude($file, $path = __DIR__) {
+    public function setInclude(string $file, string $path = __DIR__): self
+    {
         ob_start();
         include $path . '/' . $file;
         $this->setContent(ob_get_clean());
@@ -193,26 +195,23 @@ class Layout_Element {
 
     /**
      * getContent
-     *
      * CONTENT MANAGEMENT
      * Get the collected content so far
-     *
-     * @return string   $this->_content return the content
      */
-    public function getContent() {
+    public function getContent(): string
+    {
         return $this->_content;
     }
 
     /**
      * addClass
-     *
      * CLASS MANAGEMENT
      * Add one or more classes to the Element
      *
      * @param string    $classes    Class name or different classes separate by spaces
-     * @return $this;
      */
-    public function addClass($classes) {
+    public function addClass(string $classes): self
+    {
         foreach (explode(' ', $classes) as $class) {
             $this->setClass($class);
         }
@@ -221,59 +220,48 @@ class Layout_Element {
 
     /**
      * setClass
-     *
      * CLASS MANAGEMENT
-     * Set one class to the Element
-     *
-     * @param string $class Class name
-     * @return $this;
+     * Add one class to the Element
      */
-    public function setClass($class) {
+    public function setClass(string $class): self
+    {
         $this->_class[$class] = $class;
         return $this;
     }
 
     /**
      * removeClass
-     *
      * CLASS MANAGEMENT
      * Remove one class from the Element
-     *
-     * @param string $class Class name
-     * @return $this;
      */
-    public function removeClass($class) {
+    public function removeClass(string $class): self
+    {
         unset($this->_class[$class]);
         return $this;
     }
 
     /**
      * hasClass
-     *
      * CLASS MANAGEMENT
      * Check if the Element has a class
-     *
-     * @param string    $class  Class name
-     * @return boolean;
      */
-    public function hasClass($class) {
-        if (isset($this->_class[$class]) && $this->_class[$class]) {
-            return true;
-        }
+    public function hasClass(string $class): bool
+    {
+        return !empty($this->_class[$class]);
     }
 
     /**
      * setData
-     *
      * DATA ATTRIBUTE MANAGEMENT
      * Check if the Element has a class
      *
-     * @param string    $name   The data name will be complile with "data-"
+     * @param string    $key    The data name will be complile with "data-"
      * @param string    $value  The data value
      * @return $this;
      */
-    public function setData($name, $value) {
-        $this->attr['data-' . $name] = $value;
+    public function setData(string $key, string $value): self
+    {
+        $this->attr['data-' . $key] = $value;
         return $this;
     }
 
@@ -293,7 +281,8 @@ class Layout_Element {
      * @param string    $value      CSS value
      * @return $this;
      */
-    public function setCss($property, $value) {
+    public function setCss(string $property, $value): self
+    {
         $this->_css[$property] = $value;
         return $this;
     }
@@ -304,9 +293,10 @@ class Layout_Element {
      * DATA ATTRIBUTE MANAGEMENT
      * Render all attibutes in this Element
      *
-     * @return string    Al the attributes glue toguether in a string
+     * @return string All the attributes glue toguether in a string
      */
-    private function _renderAttr() {
+    private function _renderAttr(): string
+    {
         $display = null;
 
         /* Lets set classes to the attributes */
@@ -338,7 +328,8 @@ class Layout_Element {
      * @deprecated since version 1.0.4
      * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
      */
-    public function isTag() {
+    public function isTag(): self
+    {
         $this->isSingleton();
         return $this;
     }
@@ -347,7 +338,8 @@ class Layout_Element {
      * isTag
      * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
      */
-    public function isSingleton() {
+    public function isSingleton(): self
+    {
         $this->isSingleton = true;
         return $this;
     }
@@ -359,7 +351,8 @@ class Layout_Element {
      *
      * @return string   $display    All the attributes glue together in a string
      */
-    public function render() {
+    public function render(): string
+    {
 
         $tag    = $this->_tag;
         $opener = '<';
@@ -384,7 +377,7 @@ class Layout_Element {
      * MAGIC FUNCTION
      * Render object when it is treated like a string
      *
-     * @return string   $this->render() All the attributes glue together into a string
+     * @return string $this->render() All the attributes glue together into a string
      */
     public function __toString() {
         return $this->render();
