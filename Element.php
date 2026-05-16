@@ -10,11 +10,11 @@
  * @category   Frontend & Backend
  * @package    PHP-OOP-HTML-Tag-Element
  * @author     Santino Lange <santino@uhupi.com>
- * @copyright  2015-2021 Uhupi Utilities
+ * @copyright  2015-2023 Uhupi
  * @license    MIT
  */
 
-class Layout_Element {
+class Element {
 
     /**
      * Html Element attributes.
@@ -74,7 +74,8 @@ class Layout_Element {
      * @param mixed  $content   Preset or previous content in your element
      * @param string $class     Class or classes you want to preset in your element
      */
-    public function __construct($tag = 'div', $content = false, $class = null) {
+    public function __construct($tag = 'div', $content = false, $class = null)
+    {
         $this->_tag = $tag;
         if ($content) {
             $this->setContent($content);
@@ -92,6 +93,11 @@ class Layout_Element {
     {
         $this->_tag = $tag;
         return $this;
+    }
+
+    public function getTag(): string
+    {
+        return $this->_tag;
     }
 
     /**
@@ -147,6 +153,21 @@ class Layout_Element {
     }
 
     /**
+     * removeAttr
+     *
+     * ATTRIBUTE MANAGEMENT
+     * Remove one attr from the Element
+     *
+     * @param string $attr Attr name
+     * @return $this;
+     */
+    public function removeAttr(string $attr) : self
+    {
+        unset($this->attr[$attr]);
+        return $this;
+    }
+
+    /**
      * setTitle
      * ATTRIBUTE MANAGEMENT
      * Fill the attribute "title"
@@ -198,9 +219,13 @@ class Layout_Element {
      * CONTENT MANAGEMENT
      * Get the collected content so far
      */
-    public function getContent(): string
+    public function getContent(bool $reset = false): ?string
     {
-        return $this->_content;
+        $content = $this->_content;
+        if ($reset) {
+            $this->_content = null;
+        }
+        return $content;
     }
 
     /**
@@ -212,16 +237,22 @@ class Layout_Element {
      */
     public function addClass(string $classes): self
     {
-        foreach (explode(' ', $classes) as $class) {
-            $this->setClass($class);
+        if (!is_null($classes)) {
+            foreach (explode(' ', $classes) as $class) {
+                $this->setClass($class);
+            }
         }
         return $this;
     }
 
     /**
      * setClass
+     *
      * CLASS MANAGEMENT
-     * Add one class to the Element
+     * Set one class to the Element
+     *
+     * @param string $class Class name
+     * @return $this;
      */
     public function setClass(string $class): self
     {
@@ -230,7 +261,6 @@ class Layout_Element {
     }
 
     /**
-     * removeClass
      * CLASS MANAGEMENT
      * Remove one class from the Element
      */
@@ -241,7 +271,16 @@ class Layout_Element {
     }
 
     /**
-     * hasClass
+     * CLASS MANAGEMENT
+     * Reset all classes from the Element
+     */
+    public function resetClasses(): self
+    {
+        $this->_class = [];
+        return $this;
+    }
+
+    /**
      * CLASS MANAGEMENT
      * Check if the Element has a class
      */
@@ -251,23 +290,44 @@ class Layout_Element {
     }
 
     /**
-     * setData
      * DATA ATTRIBUTE MANAGEMENT
-     * Check if the Element has a class
-     *
-     * @param string    $key    The data name will be complile with "data-"
-     * @param string    $value  The data value
-     * @return $this;
+     * The data name will be complile with "data-"
      */
-    public function setData(string $key, string $value): self
+    public function setData(string $name, string $value): self
     {
-        $this->attr['data-' . $key] = $value;
+        $this->attr['data-' . $name] = $value;
+        return $this;
+    }
+    
+    /**
+     * DATA ATTRIBUTE MANAGEMENT
+     * Return the value of a data attribute. The data name will be complile with "data-"
+     */
+    public function getData(string $name): ?string
+    {
+        return $this->attr['data-' . $name] ?? null;
+    }
+
+    /**
+     * ARIA ATTRIBUTE MANAGEMENT
+     * The aria name will be complile with "aria-"
+     */
+    public function setAria(string $name, string $value = ''): self
+    {
+        $this->attr['aria-' . $name] = $value;
         return $this;
     }
 
     /**
-     * setData
-     *
+     * ARIA ATTRIBUTE MANAGEMENT
+     * Return the value of an aria attribute. The aria name will be complile with "aria-"
+     */
+    public function getAria(string $name): ?string
+    {
+        return $this->attr['aria-' . $name] ?? null;
+    }
+
+    /**
      * CSS ATTRIBUTE MANAGEMENT
      * This allowes to use inline CSS styling on your element
      *
@@ -276,24 +336,17 @@ class Layout_Element {
      * should be avoided where possible, as this often leads to unnecessary
      * code duplication. Further, inline CSS on HTML elements is blocked by
      * default with Content Security Policy (CSP).
-     *
-     * @param string    $property   Standard CSS Property
-     * @param string    $value      CSS value
-     * @return $this;
      */
-    public function setCss(string $property, $value): self
+    public function setStyle(string $property, $value): self
     {
         $this->_css[$property] = $value;
         return $this;
     }
 
     /**
-     * _renderAttr
-     *
      * DATA ATTRIBUTE MANAGEMENT
      * Render all attibutes in this Element
-     *
-     * @return string All the attributes glue toguether in a string
+     * Al the attributes glue toguether in a string
      */
     private function _renderAttr(): string
     {
@@ -324,18 +377,6 @@ class Layout_Element {
     }
 
     /**
-     * isTag
-     * @deprecated since version 1.0.4
-     * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
-     */
-    public function isTag(): self
-    {
-        $this->isSingleton();
-        return $this;
-    }
-
-    /**
-     * isTag
      * Define if this Element is only a Tag. (e.g., <br>, <hr>, etc...)
      */
     public function isSingleton(): self
@@ -379,7 +420,8 @@ class Layout_Element {
      *
      * @return string $this->render() All the attributes glue together into a string
      */
-    public function __toString() {
+    public function __toString(): string
+    {
         return $this->render();
     }
 }
