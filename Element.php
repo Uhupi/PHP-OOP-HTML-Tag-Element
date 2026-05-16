@@ -1,5 +1,7 @@
 <?php
 
+namespace Uhupi\Layout;
+
 /**
  * Main Class for Layout to include on Framework
  *

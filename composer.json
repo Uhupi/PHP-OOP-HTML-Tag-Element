@@ -1,16 +1,24 @@
 {
     "name": "uhupi/php-oop-html-tag-element",
-    "version": "1.0.4",
+    "description": "A PHP utility class to create and manage HTML elements using OOP.",
+    "type": "library",
     "keywords": ["uhupi", "html", "oop", "php", "element"],
     "homepage": "https://github.com/Uhupi/PHP-OOP-HTML-Tag-Element",
     "license": "MIT",
     "authors": [
         {
             "name": "Santino Lange",
+            "email": "santino@uhupi.com",
             "homepage": "https://github.com/Uhupi"
         }
     ],
     "require": {
-        "php": ">=5.2.0"
-    }
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Uhupi\\Layout\\": ""
+        }
+    },
+    "minimum-stability": "stable"
 }
