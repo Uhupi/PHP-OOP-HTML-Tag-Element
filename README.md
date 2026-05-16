@@ -20,5 +20,39 @@ PHP 7
 * PHP WebApp: Download and Copy Element.php to your project depending on your namespacing include the file into a namespaced file and create a class extending it.
 * WordPress: Include file to your Theme or any Plugin (Plugin and Explanation coming soon...)
 
+## Demo
+
+```php
+<?php
+
+// print a simple Link
+$link = new Element('a', 'Click here');
+$link->setAttr('href', '/');
+
+echo $link;
+
+// Or create your Link template
+class Button extends Element {
+    public function __construct($content = false, $url = false) {
+        parent::__construct('a', $content, 'button');
+        if ($url) {
+            $this->setAttr('href', $url);
+        }
+        $this->setClass('button');
+    }
+}
+
+// print adding your defined values like content and the url
+$button = new Button('Click here', '/');
+// or maybe you decide in the view or your template to add some content
+if (TRUE) {
+    $button->setContent(' NOW!');
+}
+echo $button;
+
+// or Print it in one line if you like
+echo new Button('Click here', '/');
+```
+
 ## License
 PHP-OOP-HTML-Tag-Element is licensed under the [MIT License](http://opensource.org/licenses/MIT).
